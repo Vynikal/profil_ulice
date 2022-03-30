@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/plugins/profil_ulice" >
+        <file>icon.png</file>
+    </qresource>
+</RCC>
