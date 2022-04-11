@@ -22,10 +22,10 @@
  ***************************************************************************/
 """
 
-import os
-
 from qgis.PyQt import QtGui, QtWidgets, uic
 from qgis.PyQt.QtCore import pyqtSignal
+from .create_profile import Street
+import os
 
 FORM_CLASS, _ = uic.loadUiType(os.path.join(
     os.path.dirname(__file__), 'profil_ulice_dockwidget_base.ui'))
@@ -44,7 +44,14 @@ class ProfilUliceDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
         # http://doc.qt.io/qt-5/designer-using-a-ui-file.html
         # #widgets-and-dialogs-with-auto-connect
         self.setupUi(self)
+        self.PbCreate.clicked.connect(self.parse_args)
 
     def closeEvent(self, event):
         self.closingPlugin.emit()
         event.accept()
+
+    def parse_args(self):
+        sirka = self.SbWidth.value()
+
+        profil = Street(sirka)
+        profil.create_profile()
