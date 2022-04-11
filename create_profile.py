@@ -57,8 +57,9 @@ class Street:
             koty.line((sec[i]+100,length+150) + (sec[i]+110,length+140), fill = red)
             koty.line((sec[i+1]+100,length+150) + (sec[i+1]+90,length+140), fill = red)
             koty.line((sec[i+1]+100,length+150) + (sec[i+1]+90,length+160), fill = red)
-            font = ImageFont.truetype("arimo.ttf", 18)
-            koty.text((100+(sec[i]+sec[i+1])/2, length+125), str(10*(sec[i+1]-sec[i])), red, font, anchor='mt')
+            fontpath = os.path.join(path, 'arimo.ttf')
+            font = ImageFont.truetype(fontpath, 18)
+            koty.text((100+(sec[i]+sec[i+1])/2, length+125), str(int(10*(sec[i+1]-sec[i]))), red, font, anchor='mt')
 
     def vkota(self, image, sec=None, length=1000):
         width = 0
@@ -83,7 +84,8 @@ class Street:
 
     def draw_text_90_into (self, text: str, into, at):
         # Measure the text area
-        font = ImageFont.truetype("arimo.ttf", 18)
+        fontpath = os.path.join(path, 'arimo.ttf')
+        font = ImageFont.truetype(fontpath, 18)
         wi, hi = font.getsize(text)
         # Copy the relevant area from the source image
         img = into.crop ((at[0]-hi/2, at[1]-wi/2, at[0] + hi/2, at[1] + wi/2))
