@@ -2,9 +2,11 @@ import os
 from PIL import Image, ImageDraw, ImageFont
 
 path = os.path.dirname(__file__)
+length = 2800
+meritko = 100  # 1 cm = 1 pixel
 
 class Street:
-    def __init__(self, sirka = 4, mhd = 1, cyklo = 1, parkovani = 1, jednosmerka = 0, stromoradi = 0, meritko = 100):
+    def __init__(self, sirka = 4, mhd = 1, cyklo = 1, parkovani = 1, jednosmerka = 0, stromoradi = 0):
         self.sirka = sirka*meritko
         self.mhd = mhd
         self.cyklo = cyklo
@@ -18,10 +20,16 @@ class Street:
         white = Image.open(os.path.join(path, 'im/white.png'))
         car = Image.open(os.path.join(path, 'im/car.png'))
         bicycle = Image.open(os.path.join(path, 'im/bicycle.png'))
+        bus = Image.open(os.path.join(path, 'im/bus.png'))
+        treebig = Image.open(os.path.join(path, 'im/treebig.png'))
+        treesmall = Image.open(os.path.join(path, 'im/treesmall.png'))
+        ped1 = Image.open(os.path.join(path, 'im/ped1.png'))
+        ped2 = Image.open(os.path.join(path, 'im/ped2.png'))
+        ped3 = Image.open(os.path.join(path, 'im/ped3.png'))
+        ped4 = Image.open(os.path.join(path, 'im/ped4.png'))
 
         # dimension definition
         width = int(self.sirka)
-        length = 1000
         top = street.resize((width, length))
 
         top.paste(car,(width*3//4-car.width//2,500), car)
@@ -38,30 +46,32 @@ class Street:
         all.save(os.path.join(path, 'im/profil.png'))
         all.show()
 
-    def hkota(self, image, sec=None, length=1000):
+    def hkota(self, image, sec=None):
         koty = ImageDraw.Draw(image)
         red = (255,0,0)
 
         if sec == None:
             width = self.sirka
             sec = (0, width)
-            length = -100
+            l = -100
+        else:
+            l = length
 
         for i in range(len(sec)-1):
-            koty.line((sec[i]+100,length+150) + (sec[i+1]+100,length+150), fill = red)
+            koty.line((sec[i]+100,l+150) + (sec[i+1]+100,l+150), fill = red)
 
-            koty.line((sec[i]+100,length+140) + (sec[i]+100,length+160), fill = red)
-            koty.line((sec[i+1]+100,length+140) + (sec[i+1]+100,length+160), fill = red)
+            koty.line((sec[i]+100,l+140) + (sec[i]+100,l+160), fill = red)
+            koty.line((sec[i+1]+100,l+140) + (sec[i+1]+100,l+160), fill = red)
 
-            koty.line((sec[i]+100,length+150) + (sec[i]+110,length+160), fill = red)
-            koty.line((sec[i]+100,length+150) + (sec[i]+110,length+140), fill = red)
-            koty.line((sec[i+1]+100,length+150) + (sec[i+1]+90,length+140), fill = red)
-            koty.line((sec[i+1]+100,length+150) + (sec[i+1]+90,length+160), fill = red)
+            koty.line((sec[i]+100,l+150) + (sec[i]+110,l+160), fill = red)
+            koty.line((sec[i]+100,l+150) + (sec[i]+110,l+140), fill = red)
+            koty.line((sec[i+1]+100,l+150) + (sec[i+1]+90,l+140), fill = red)
+            koty.line((sec[i+1]+100,l+150) + (sec[i+1]+90,l+160), fill = red)
             fontpath = os.path.join(path, 'arimo.ttf')
             font = ImageFont.truetype(fontpath, 18)
-            koty.text((100+(sec[i]+sec[i+1])/2, length+125), str(int(10*(sec[i+1]-sec[i]))), red, font, anchor='mt')
+            koty.text((100+(sec[i]+sec[i+1])/2, l+125), str(int(10*(sec[i+1]-sec[i]))), red, font, anchor='mt')
 
-    def vkota(self, image, sec=None, length=1000):
+    def vkota(self, image, sec=None):
         width = 0
         koty = ImageDraw.Draw(image)
         red = (255,0,0)
