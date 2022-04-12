@@ -32,7 +32,7 @@ class Street:
 
         # koty
         self.hkota(all)
-        self.hkota(all, (0,100,200,350,500))
+        self.hkota(all, (0, width/2, width))
         self.vkota(all)
 
         all.save(os.path.join(path, 'im/profil.png'))
