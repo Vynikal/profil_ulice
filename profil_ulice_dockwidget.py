@@ -24,7 +24,7 @@
 
 from qgis.PyQt import QtGui, QtWidgets, uic
 from qgis.PyQt.QtCore import pyqtSignal
-from .create_profile import CreateProfile
+from .create_profile import Street
 import os
 
 FORM_CLASS, _ = uic.loadUiType(os.path.join(
@@ -53,5 +53,5 @@ class ProfilUliceDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
     def parse_args(self):
         sirka = self.SbWidth.value()
 
-        profil = CreateProfile(sirka)
+        profil = Street(sirka)
         profil.create_profile()
