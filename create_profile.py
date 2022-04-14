@@ -1,18 +1,17 @@
 import os
 from PIL import Image, ImageDraw, ImageFont
+from random import randint
 
 path = os.path.dirname(__file__)
 length = 2800
 meritko = 100  # 1 cm = 1 pixel
 
 class Street:
-    def __init__(self, sirka = 4, mhd = 1, cyklo = 1, parkovani = 1, jednosmerka = 0, stromoradi = 0):
+    def __init__(self, sirka = 4, mhd = 1, cyklo = 1, jednosmerka = 0):
         self.sirka = sirka*meritko
         self.mhd = mhd
         self.cyklo = cyklo
-        self.parkovani = parkovani
         self.jednosmerka = jednosmerka
-        self.stromoradi = stromoradi
 
     def create_profile(self):
         # load images
@@ -31,17 +30,25 @@ class Street:
         # dimension definition
         width = int(self.sirka)
         top = street.resize((width, length))
+        if width < 600:
+            self.pastem(top,car,width*2//3,2000)
+            self.pastem(top,car,width*2//3,500)
+            self.pastem(top,bicycle,width*3//4,1000)
+            self.pastem(top,bicycle.rotate(180),width//4,1500)
+            self.pastem(top,ped1.rotate(randint(0,360)),width-50,randint(100,length-100))
+            self.pastem(top,ped3.rotate(randint(0,360)),50,randint(100,length-100))
+            hspec = (0,width)
+            vspec = (0,length)
 
-        top.paste(car,(width*3//4-car.width//2,500), car)
-        top.paste(bicycle,(width*3//4-bicycle.width//2,200), bicycle)
-
-        all = white.resize((width+200,length+200))
-        all.paste(top,(100,100),top)
+        # elif width >= 600 & width < 800:
+        #     self.
 
         # koty
+        all = white.resize((width+200,length+200))
+        all.paste(top,(100,100),top)
         self.hkota(all)
-        self.hkota(all, (0, width/2, width))
-        self.vkota(all)
+        self.hkota(all, hspec)
+        self.vkota(all, vspec)
 
         all.save(os.path.join(path, 'im/profil.png'))
         all.show()
@@ -109,3 +116,9 @@ class Street:
         # Insert it back into the source image
         # Note that we don't need a mask
         into.paste (img, (at[0]-hi//2, at[1]-wi//2))
+
+    def pastem(self, im1: Image, im2: Image, x, y):
+        # method for pasting image by its center
+        xs = x-im2.width//2
+        ys = y-im2.height//2
+        im1.paste(im2,(xs,ys),im2)
