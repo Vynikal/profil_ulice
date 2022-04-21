@@ -35,13 +35,21 @@ class Street:
             self.pastem(top,car,width*2//3,500)
             self.pastem(top,bicycle,width*3//4,1000)
             self.pastem(top,bicycle.rotate(180),width//4,1500)
-            self.pastem(top,ped1.rotate(randint(0,360)),width-50,randint(100,length-100))
-            self.pastem(top,ped3.rotate(randint(0,360)),50,randint(100,length-100))
+            self.pastem(top,ped1.rotate(randint(0,360)),75,randint(100,length-100))
+            self.pastem(top,ped3.rotate(randint(0,360)),75,randint(100,length-100))
             hspec = (0,width)
             vspec = (0,length)
 
-        # elif width >= 600 & width < 800:
-        #     self.
+        elif width >= 600 & width < 750:
+            # parkovani ANO (ne pricne), stromy NE, jednosmerka ANO, prip rozsireni o 1.5, chodnik min 1.5 m z obou stran, urb. charakter (segregace, stozary), typ ulice, cyklopruh sdílení, MHD ne
+            # VSTUP: sirka, urb. ch., typ ulice, 
+            # pro ted stozary 50 od hrany
+            chodnik = ImageDraw.Draw(top)
+            chodnik.line((550,0)+(550,length),fill = (0,0,0))
+            hspec = (0,550,width)
+            vspec = (0,length)
+
+            # 750 - max, stromy ANO
 
         # koty
         all = white.resize((width+200,length+200))
