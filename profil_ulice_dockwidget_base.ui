@@ -16,6 +16,13 @@
   <widget class="QWidget" name="dockWidgetContents">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
+     <widget class="QPushButton" name="PbTakeAttr">
+      <property name="text">
+       <string>Přeber atributy z výběru</string>
+      </property>
+     </widget>
+    </item>
+    <item>
      <widget class="QLabel" name="LWidth">
       <property name="text">
        <string>Šířka profilu v metrech</string>

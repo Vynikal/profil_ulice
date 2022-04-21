@@ -24,6 +24,7 @@
 
 from qgis.PyQt import QtGui, QtWidgets, uic
 from qgis.PyQt.QtCore import pyqtSignal
+from qgis.utils import iface
 from .create_profile import Street
 import os
 
@@ -45,6 +46,13 @@ class ProfilUliceDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
         # #widgets-and-dialogs-with-auto-connect
         self.setupUi(self)
         self.PbCreate.clicked.connect(self.parse_args)
+        self.PbTakeAttr.clicked.connect(self.take_attributes)
+
+    def take_attributes(self):
+        layer = iface.activeLayer()
+        feature = layer.selectedFeatures()
+        width = feature[0].attribute(1)
+        self.SbWidth.setValue(width)
 
     def closeEvent(self, event):
         self.closingPlugin.emit()
