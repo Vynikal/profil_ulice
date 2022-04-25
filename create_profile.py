@@ -12,6 +12,9 @@ class Street:
         self.mhd = mhd
         self.cyklo = cyklo
         self.jednosmerka = jednosmerka
+        self.hspec = (0,self.sirka)
+        self.vspec = (0,length)
+
 
     def create_profile(self):
         # load images
@@ -22,34 +25,16 @@ class Street:
         bus = Image.open(os.path.join(path, 'im/bus.png'))
         treebig = Image.open(os.path.join(path, 'im/treebig.png'))
         treesmall = Image.open(os.path.join(path, 'im/treesmall.png'))
-        ped1 = Image.open(os.path.join(path, 'im/ped1.png'))
-        ped2 = Image.open(os.path.join(path, 'im/ped2.png'))
-        ped3 = Image.open(os.path.join(path, 'im/ped3.png'))
-        ped4 = Image.open(os.path.join(path, 'im/ped4.png'))
 
         # dimension definition
         width = int(self.sirka)
+        
+
         top = street.resize((width, length))
-        if width < 600:
-            self.pastem(top,car,width*2//3,2000)
-            self.pastem(top,car,width*2//3,500)
-            self.pastem(top,bicycle,width*3//4,1000)
-            self.pastem(top,bicycle.rotate(180),width//4,1500)
-            self.pastem(top,ped1.rotate(randint(0,360)),75,randint(100,length-100))
-            self.pastem(top,ped3.rotate(randint(0,360)),75,randint(100,length-100))
-            hspec = (0,width)
-            vspec = (0,length)
-
-        elif width >= 600 & width < 750:
-            # parkovani ANO (ne pricne), stromy NE, jednosmerka ANO, prip rozsireni o 1.5, chodnik min 1.5 m z obou stran, urb. charakter (segregace, stozary), typ ulice, cyklopruh sdílení, MHD ne
-            # VSTUP: sirka, urb. ch., typ ulice, 
-            # pro ted stozary 50 od hrany
-            chodnik = ImageDraw.Draw(top)
-            chodnik.line((550,0)+(550,length),fill = (0,0,0))
-            hspec = (0,550,width)
-            vspec = (0,length)
-
-            # 750 - max, stromy ANO
+        self.add_curb(top, width)
+        
+        hspec = sorted(self.hspec)
+        vspec = sorted(self.vspec)
 
         # koty
         all = white.resize((width+200,length+200))
@@ -60,6 +45,33 @@ class Street:
 
         all.save(os.path.join(path, 'im/profil.png'))
         all.show()
+
+    def add_curb(self, image, width):
+        ped1 = Image.open(os.path.join(path, 'im/ped1.png'))
+        ped2 = Image.open(os.path.join(path, 'im/ped2.png'))
+        ped3 = Image.open(os.path.join(path, 'im/ped3.png'))
+        ped4 = Image.open(os.path.join(path, 'im/ped4.png'))
+        chodnik = ImageDraw.Draw(image)
+        black = (0,0,0)
+        sirka = 150
+        if width >= 750:
+            chodnik.line((sirka,0)+(sirka,length), fill = black)
+            chodnik.line((width-sirka,0)+(width-sirka,length), fill = black)
+            self.pastem(image,ped1,75,200)
+            self.pastem(image,ped2,75,1800)
+            self.pastem(image,ped3,width-75,500)
+            self.pastem(image,ped4,width-75,2200)
+            addh = (sirka, width-sirka)
+        elif width >= 600 and width < 750:
+            chodnik.line((sirka,0)+(sirka,length), fill = black)
+            self.pastem(image,ped1,75,200)
+            self.pastem(image,ped2,75,1800)
+            addh = (sirka,)
+        else:
+            self.pastem(image,ped1,75,200)
+            self.pastem(image,ped2,75,1800)
+            addh = ()
+        self.hspec = self.hspec + addh
 
     def hkota(self, image, sec=None):
         koty = ImageDraw.Draw(image)
