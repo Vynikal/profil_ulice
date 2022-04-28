@@ -15,23 +15,49 @@ class Street:
         self.hspec = (0,self.sirka)
         self.vspec = (0,length)
 
-
     def create_profile(self):
         # load images
         street = Image.open(os.path.join(path, 'im/street.png'))
         white = Image.open(os.path.join(path, 'im/white.png'))
-        car = Image.open(os.path.join(path, 'im/car.png'))
-        bicycle = Image.open(os.path.join(path, 'im/bicycle.png'))
-        bus = Image.open(os.path.join(path, 'im/bus.png'))
         treebig = Image.open(os.path.join(path, 'im/treebig.png'))
-        treesmall = Image.open(os.path.join(path, 'im/treesmall.png'))
 
         # dimension definition
         width = int(self.sirka)
-        
-
         top = street.resize((width, length))
-        self.add_curb(top, width)
+
+        # sem prijde rozhodovaci metoda
+        if width < 600:
+            sides_curb = 0
+            sides_park = 0
+            oneway = 1
+            left = 0
+            right = width
+        elif width >= 600 and width < 750:
+            sides_curb = 1
+            sides_park = 0
+            oneway = 1
+            left = 150
+            right = width
+        elif width >= 1000:
+            sides_curb = 1
+            sides_park = 1
+            oneway = 0
+            left = 150
+            right = width-250
+        else:
+            sides_curb = 1
+            sides_park = 1
+            oneway = 1
+            left = 150
+            right = width-250
+
+
+        typ_park = 1
+        w_curb = 150
+
+        self.add_curb(top, width, sides_curb, w_curb)
+        self.add_parking(top, width, sides_park, typ_park, sides_curb, w_curb)
+        self.add_cars(top, oneway, left, right)
         
         hspec = sorted(self.hspec)
         vspec = sorted(self.vspec)
@@ -46,33 +72,95 @@ class Street:
         all.save(os.path.join(path, 'im/profil.png'))
         all.show()
 
-    def add_curb(self, image, width):
+    def add_curb(self, top, width, sides_curb, w_curb):
         ped1 = Image.open(os.path.join(path, 'im/ped1.png'))
         ped2 = Image.open(os.path.join(path, 'im/ped2.png'))
         ped3 = Image.open(os.path.join(path, 'im/ped3.png'))
         ped4 = Image.open(os.path.join(path, 'im/ped4.png'))
-        chodnik = ImageDraw.Draw(image)
+        chodnik = ImageDraw.Draw(top)
         black = (0,0,0)
-        sirka = 150
-        if width >= 750:
-            chodnik.line((sirka,0)+(sirka,length), fill = black)
-            chodnik.line((width-sirka,0)+(width-sirka,length), fill = black)
-            self.pastem(image,ped1,75,200)
-            self.pastem(image,ped2,75,1800)
-            self.pastem(image,ped3,width-75,500)
-            self.pastem(image,ped4,width-75,2200)
-            addh = (sirka, width-sirka)
-        elif width >= 600 and width < 750:
-            chodnik.line((sirka,0)+(sirka,length), fill = black)
-            self.pastem(image,ped1,75,200)
-            self.pastem(image,ped2,75,1800)
-            addh = (sirka,)
-        else:
-            self.pastem(image,ped1,75,200)
-            self.pastem(image,ped2,75,1800)
+        if sides_curb == 2:
+            chodnik.line((w_curb,0)+(w_curb,length), fill = black)
+            chodnik.line((width-w_curb,0)+(width-w_curb,length), fill = black)
+            self.pastem(top,ped1,75,200)
+            self.pastem(top,ped2,75,1800)
+            self.pastem(top,ped3,width-75,500)
+            self.pastem(top,ped4,width-75,2200)
+            addh = (w_curb, width-w_curb)
+        elif sides_curb == 1:
+            chodnik.line((w_curb,0)+(w_curb,length), fill = black)
+            self.pastem(top,ped1,75,200)
+            self.pastem(top,ped2,75,1800)
+            addh = (w_curb,)
+        else: # no curbs
+            self.pastem(top,ped1,75,200)
+            self.pastem(top,ped2,75,1800)
             addh = ()
         self.hspec = self.hspec + addh
 
+    def add_parking(self, top, width, sides_park, typ, sides_curb, w_curb):
+        # park = Image.open(os.path.join(path, 'im/park.png'))
+        if typ == 1:
+            line1 = Image.open(os.path.join(path, 'im/line1.png'))
+
+            line = Image.new(mode = "RGBA", size = (400, 2800))
+            line.paste(line1, (100, 0), line1)
+            treesmall = Image.open(os.path.join(path, 'im/treesmall.png'))
+            tree = Image.open(os.path.join(path, 'im/treesmall.png'))
+            tree.putalpha(255)
+            line.paste(tree, (50, 250), treesmall)
+            line.paste(tree, (50, 2250), treesmall)
+            pas = 200
+
+            # line = Image.new(mode = "RGBA", size = (pas, length))
+            # line.paste(park, (0,500), park)
+            # line.paste(park, (0,1100), park)
+            # line.paste(park, (0,1700), park)
+            # line.paste(park, (0,-300), park)
+            # line.paste(park, (0,2500), park)
+            # line.save(os.path.join(path, 'im/line1.png'))
+
+        if sides_park == 1 and (sides_curb == 1 or sides_curb == 0):
+            self.pastem(top, line, width-pas//2-50, length//2)
+            addh = (width-pas-50,width-50)
+        elif sides_park == 1 and sides_curb == 2:
+            self.pastem(top, line, width-w_curb-pas//2, length//2)
+            addh = (width-w_curb-pas,)
+        elif sides_park == 2 and sides_curb == 0:
+            self.pastem(top, line, 50+pas//2, length//2)
+            self.pastem(top, line, width-pas//2-50, length//2)
+            addh = (50,50+pas,width-pas-50,width-50)
+        elif sides_park == 2 and sides_curb == 1:
+            self.pastem(top, line, w_curb+pas//2, length//2)
+            self.pastem(top, line, width-pas//2-50, length//2)
+            addh = (w_curb+pas,width-pas-50,width-50)
+        elif sides_park == 2 and sides_curb == 2:
+            self.pastem(top, line, w_curb+pas//2, length//2)
+            self.pastem(top, line, width-w_curb-pas//2, length//2)
+            addh = (pas+w_curb,width-w_curb-pas)
+        else: # (sides_park = 0)
+            addh = ()
+            pass
+        self.hspec = self.hspec + addh
+
+    def add_cars(self, top, oneway, left, right):
+        car = Image.open(os.path.join(path, 'im/car.png'))
+        bicycle = Image.open(os.path.join(path, 'im/bicycle.png'))
+        bus = Image.open(os.path.join(path, 'im/bus.png'))
+        width = right-left
+        if oneway == 1:
+            self.pastem(top, car, left+round(width*7/11), 500)
+            self.pastem(top, car, left+round(width*7/11), 2300)
+        else:
+            self.pastem(top, car, left+round(width*3/4), 500)
+            self.pastem(top, car, left+round(width*3/4), 2300)
+            self.pastem(top, car.rotate(180), left+round(width*1/4), 1400)
+
+        self.pastem(top, bicycle, left+round(width*3/4), 900)
+        self.pastem(top, bicycle.rotate(180), left+round(width*1/4), 1500)
+
+
+        
     def hkota(self, image, sec=None):
         koty = ImageDraw.Draw(image)
         red = (255,0,0)

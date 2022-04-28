@@ -47,6 +47,8 @@ class ProfilUliceDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
         self.setupUi(self)
         self.PbCreate.clicked.connect(self.parse_args)
         self.PbTakeAttr.clicked.connect(self.take_attributes)
+        self.CbOneway.addItem("Ne")
+        self.CbOneway.addItem("Ano")
 
     def take_attributes(self):
         layer = iface.activeLayer()
@@ -60,6 +62,7 @@ class ProfilUliceDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
 
     def parse_args(self):
         sirka = self.SbWidth.value()
+        jednosmerka = self.CbOneway.currentIndex()
 
-        profil = Street(sirka)
+        profil = Street(sirka, jednosmerka=jednosmerka)
         profil.create_profile()
