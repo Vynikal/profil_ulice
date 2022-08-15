@@ -23,31 +23,28 @@ class Street:
 
         # dimension definition
         width = int(self.sirka)
+        oneway = self.jednosmerka
         top = street.resize((width, length))
 
         # sem prijde rozhodovaci metoda
         if width < 600:
             sides_curb = 0
             sides_park = 0
-            oneway = 1
             left = 0
             right = width
         elif width >= 600 and width < 750:
             sides_curb = 1
             sides_park = 0
-            oneway = 1
             left = 150
             right = width
         elif width >= 1000:
-            sides_curb = 1
-            sides_park = 1
-            oneway = 0
+            sides_curb = 2
+            sides_park = 2
             left = 150
             right = width-250
         else:
             sides_curb = 1
             sides_park = 1
-            oneway = 1
             left = 150
             right = width-250
 
@@ -156,9 +153,8 @@ class Street:
             self.pastem(top, car, left+round(width*3/4), 2300)
             self.pastem(top, car.rotate(180), left+round(width*1/4), 1400)
 
-        self.pastem(top, bicycle, left+round(width*3/4), 900)
-        self.pastem(top, bicycle.rotate(180), left+round(width*1/4), 1500)
-
+        self.pastem(top, bicycle, left+round(width*3/4), 1100)
+        self.pastem(top, bicycle.rotate(180), left+round(width*1/4), 400)
 
         
     def hkota(self, image, sec=None):

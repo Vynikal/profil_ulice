@@ -1,6 +1,5 @@
 from create_profile import Street
-sirka = 10
-mhd = 1
+sirka = 15
 jednosmerka = 0 # podle soucasneho stavu
-Ulice = Street(sirka)
+Ulice = Street(sirka, jednosmerka=jednosmerka)
 Ulice.create_profile()

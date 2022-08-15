@@ -55,6 +55,8 @@ class ProfilUliceDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
         feature = layer.selectedFeatures()
         width = feature[0].attribute(1)
         self.SbWidth.setValue(width)
+        oneway = feature[0].attribute(0)
+        self.CbOneway.setCurrentIndex(oneway)
 
     def closeEvent(self, event):
         self.closingPlugin.emit()
