@@ -25,6 +25,7 @@
 from qgis.PyQt import QtGui, QtWidgets, uic
 from qgis.PyQt.QtCore import pyqtSignal
 from qgis.utils import iface
+from qgis.core import NULL
 from .create_profile import Street
 import os
 
@@ -47,16 +48,79 @@ class ProfilUliceDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
         self.setupUi(self)
         self.PbCreate.clicked.connect(self.parse_args)
         self.PbTakeAttr.clicked.connect(self.take_attributes)
-        self.CbOneway.addItem("Ne")
-        self.CbOneway.addItem("Ano")
 
     def take_attributes(self):
         layer = iface.activeLayer()
-        feature = layer.selectedFeatures()
-        width = feature[0].attribute(1)
+        feature = layer.selectedFeatures()[0]
+
+        oneway = feature.attribute(0)
+        width = feature.attribute(1)
+        typul = feature.attribute(2)
+        urbvyz = feature.attribute(4)
+        mhd = feature.attribute(6)
+        urbstr1 = feature.attribute(7)
+        urbstr2 = feature.attribute(8)
+        urbstr3 = feature.attribute(9)
+        urbstr4 = feature.attribute(10)
+        urbstr5 = feature.attribute(11)
+        urbstr6 = feature.attribute(12)
+        urbstr7 = feature.attribute(13)
+        parter = feature.attribute(15)
+        zona = feature.attribute(16)
+
         self.SbWidth.setValue(width)
-        oneway = feature[0].attribute(0)
-        self.CbOneway.setCurrentIndex(oneway)
+        if oneway:
+            self.CbOneway.setChecked(True)
+        else:
+            self.CbOneway.setChecked(False)
+
+        if mhd:
+            self.CbMhd.setChecked(True)
+        else:
+            self.CbMhd.setChecked(False)
+
+        self.CbTypul.setCurrentText(typul)
+        self.CbUrbvyz.setCurrentText(urbvyz)
+        self.CbZona.setCurrentText(str(zona))
+        print(zona)
+        if zona == NULL:
+            self.CbZona.setCurrentText("-")
+
+        if parter < 0.5:
+            self.HsParter.setValue(0)
+        elif parter > 1.5:
+            self.HsParter.setValue(2)
+        else:
+            self.HsParter.setValue(1)
+
+        if urbstr1:
+            self.CbUrbstr.setItemCheckState(0,2)
+        else:
+            self.CbUrbstr.setItemCheckState(0,0)
+        if urbstr2:
+            self.CbUrbstr.setItemCheckState(1,2)
+        else:
+            self.CbUrbstr.setItemCheckState(1,0)
+        if urbstr3:
+            self.CbUrbstr.setItemCheckState(2,2)
+        else:
+            self.CbUrbstr.setItemCheckState(2,0)
+        if urbstr4:
+            self.CbUrbstr.setItemCheckState(3,2)
+        else:
+            self.CbUrbstr.setItemCheckState(3,0)
+        if urbstr5:
+            self.CbUrbstr.setItemCheckState(4,2)
+        else:
+            self.CbUrbstr.setItemCheckState(4,0)
+        if urbstr6:
+            self.CbUrbstr.setItemCheckState(5,2)
+        else:
+            self.CbUrbstr.setItemCheckState(5,0)
+        if urbstr7:
+            self.CbUrbstr.setItemCheckState(6,2)
+        else:
+            self.CbUrbstr.setItemCheckState(6,0)
 
     def closeEvent(self, event):
         self.closingPlugin.emit()

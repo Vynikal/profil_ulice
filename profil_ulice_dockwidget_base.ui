@@ -43,17 +43,211 @@
      </widget>
     </item>
     <item>
-     <widget class="QLabel" name="label">
+     <widget class="QCheckBox" name="CbOneway">
       <property name="text">
        <string>Jednosměrka</string>
       </property>
      </widget>
     </item>
     <item>
-     <widget class="QComboBox" name="CbOneway">
-      <property name="currentIndex">
-       <number>-1</number>
+     <widget class="QCheckBox" name="CbMhd">
+      <property name="text">
+       <string>MHD</string>
       </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="label_2">
+      <property name="text">
+       <string>Typ ulice</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QComboBox" name="CbTypul">
+      <property name="editable">
+       <bool>false</bool>
+      </property>
+      <item>
+       <property name="text">
+        <string>lokalni (centralni) ulice</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>lokalni (obytna) ulice</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>hlavni</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>pesi</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>dopravni</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>cyklostezka</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="label_3">
+      <property name="text">
+       <string>Urbanistický význam</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QComboBox" name="CbUrbvyz">
+      <item>
+       <property name="text">
+        <string>lokalni centrum</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>verejna prostranstvi v pam. rezervaci</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>vyznamna verejna prostranstvi</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>ostatni verejna prostranstvi</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="label_5">
+      <property name="text">
+       <string>Urbanistické struktury</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QgsCheckableComboBox" name="CbUrbstr">
+      <item>
+       <property name="text">
+        <string>historicke lazenske centrum</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>kompaktni mestske centrum</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>puvodni venkovska jadra</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>modernisticke mesto</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>zahradni mesto</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>krajina ve meste</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>arealy a infrastruktury</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>Aktivita parteru</string>
+      </property>
+     </widget>
+    </item>
+    <item alignment="Qt::AlignHCenter">
+     <widget class="QSlider" name="HsParter">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="maximum">
+       <number>2</number>
+      </property>
+      <property name="pageStep">
+       <number>1</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="tickPosition">
+       <enum>QSlider::NoTicks</enum>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="label_4">
+      <property name="text">
+       <string>Zóna</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QComboBox" name="CbZona">
+      <item>
+       <property name="text">
+        <string>-</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>pesi</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>obytna</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>30</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>20</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>15</string>
+       </property>
+      </item>
      </widget>
     </item>
     <item>
@@ -80,6 +274,11 @@
   </widget>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>QgsCheckableComboBox</class>
+   <extends>QComboBox</extends>
+   <header>qgscheckablecombobox.h</header>
+  </customwidget>
   <customwidget>
    <class>QgsDoubleSpinBox</class>
    <extends>QDoubleSpinBox</extends>
