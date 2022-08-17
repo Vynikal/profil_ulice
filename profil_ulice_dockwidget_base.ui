@@ -209,6 +209,19 @@
       </property>
      </widget>
     </item>
+    <item alignment="Qt::AlignHCenter">
+     <widget class="QLabel" name="label_6">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>Malá     Střední     Velká</string>
+      </property>
+     </widget>
+    </item>
     <item>
      <widget class="QLabel" name="label_4">
       <property name="text">

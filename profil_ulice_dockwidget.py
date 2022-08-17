@@ -25,7 +25,7 @@
 from qgis.PyQt import QtGui, QtWidgets, uic
 from qgis.PyQt.QtCore import pyqtSignal
 from qgis.utils import iface
-from qgis.core import NULL
+from qgis.core import NULL, QgsMessageLog
 from .create_profile import Street
 import os
 
@@ -82,7 +82,6 @@ class ProfilUliceDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
         self.CbTypul.setCurrentText(typul)
         self.CbUrbvyz.setCurrentText(urbvyz)
         self.CbZona.setCurrentText(str(zona))
-        print(zona)
         if zona == NULL:
             self.CbZona.setCurrentText("-")
 
@@ -128,7 +127,48 @@ class ProfilUliceDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
 
     def parse_args(self):
         sirka = self.SbWidth.value()
-        jednosmerka = self.CbOneway.currentIndex()
+        jednosmerka = self.CbOneway.isChecked()
+        mhd = self.CbMhd.isChecked()
+        typul = self.CbTypul.currentIndex()
+        urbvyz = self.CbUrbvyz.currentIndex()
+        zona = self.CbZona.currentText()
+        urbstr = self.CbUrbstr.checkedItems()
+        parter = self.HsParter.sliderPosition()
+
+        QgsMessageLog.logMessage(str([sirka,jednosmerka,mhd,typul,urbvyz,zona, urbstr,parter]),'Profil ulice')
 
         profil = Street(sirka, jednosmerka=jednosmerka)
         profil.create_profile()
+
+
+"""
+sirka = float with half-meters
+jednosmerka = bool
+mhd = bool
+typul = int:
+1: lokalni (centralni) ulice
+2: lokalni (obytna) ulice
+3: hlavni
+4: pesi
+5: dopravni
+6: cyklostezka
+
+urbvyz = int:
+1: lokalni centrum
+2: verejna prostranstvi v pam. rezervaci
+3: vyznamna verejna prostranstvi
+4: ostatni verejna prostranstvi
+
+zona = str: -, pesi, obytna, 30, 20, 15
+
+urbstr = str:
+historicke lazenske centrum
+kompaktni mestske centrum
+puvodni venkovska jadra
+modernisticke mesto
+zahradni mesto
+krajina ve meste
+arealy a infrastruktury
+
+parter = int: 0,1,2
+"""
