@@ -6,6 +6,11 @@ path = os.path.dirname(__file__)
 length = 2800
 meritko = 100  # 1 cm = 1 pixel
 
+# load images
+street = Image.open(os.path.join(path, 'im/street.png'))
+vertical = Image.open(os.path.join(path, 'im/vertical.png'))
+white = Image.open(os.path.join(path, 'im/white.png'))
+
 class Street:
     def __init__(self, sirka = 4, mhd = 1, cyklo = 1, jednosmerka = 0):
         self.sirka = sirka*meritko
@@ -16,11 +21,6 @@ class Street:
         self.vspec = (0,length)
 
     def create_profile(self):
-        # load images
-        street = Image.open(os.path.join(path, 'im/street.png'))
-        white = Image.open(os.path.join(path, 'im/white.png'))
-        treebig = Image.open(os.path.join(path, 'im/treebig.png'))
-
         # dimension definition
         width = int(self.sirka)
         oneway = self.jednosmerka
@@ -32,7 +32,7 @@ class Street:
             sides_park = 0
             left = 0
             right = width
-        elif width >= 600 and width < 750:
+        elif width >= 600 and width < 800:
             sides_curb = 1
             sides_park = 0
             left = 150
@@ -59,9 +59,12 @@ class Street:
         hspec = sorted(self.hspec)
         vspec = sorted(self.vspec)
 
+        vtop = vertical.resize((width, 500))
+
         # koty
-        all = white.resize((width+200,length+200))
-        all.paste(top,(100,100),top)
+        all = white.resize((width+200,length+800))
+        all.paste(top,(100,700),top)
+        all.paste(vtop,(100,100),vtop)
         self.hkota(all)
         self.hkota(all, hspec)
         self.vkota(all, vspec)
@@ -164,9 +167,9 @@ class Street:
         if sec == None:
             width = self.sirka
             sec = (0, width)
-            l = -100
+            l = length + 600
         else:
-            l = length
+            l = 500
 
         for i in range(len(sec)-1):
             koty.line((sec[i]+100,l+150) + (sec[i+1]+100,l+150), fill = red)
@@ -191,17 +194,17 @@ class Street:
             sec = (0, length)
 
         for i in range(len(sec)-1):
-            koty.line((width+50,sec[i]+100) + (width+50,sec[i+1]+100), fill = red)
+            koty.line((width+50,sec[i]+700) + (width+50,sec[i+1]+700), fill = red)
 
-            koty.line((width+40,sec[i]+100) + (width+60,sec[i]+100), fill = red)
-            koty.line((width+40,sec[i+1]+100) + (width+60,sec[i+1]+100), fill = red)
+            koty.line((width+40,sec[i]+700) + (width+60,sec[i]+700), fill = red)
+            koty.line((width+40,sec[i+1]+700) + (width+60,sec[i+1]+700), fill = red)
 
-            koty.line((width+50,sec[i]+100) + (width+60,sec[i]+110), fill = red)
-            koty.line((width+50,sec[i]+100) + (width+40,sec[i]+110), fill = red)
-            koty.line((width+50,sec[i+1]+100) + (width+40,sec[i+1]+90), fill = red)
-            koty.line((width+50,sec[i+1]+100) + (width+60,sec[i+1]+90), fill = red)
+            koty.line((width+50,sec[i]+700) + (width+60,sec[i]+710), fill = red)
+            koty.line((width+50,sec[i]+700) + (width+40,sec[i]+710), fill = red)
+            koty.line((width+50,sec[i+1]+700) + (width+40,sec[i+1]+690), fill = red)
+            koty.line((width+50,sec[i+1]+700) + (width+60,sec[i+1]+690), fill = red)
             # cant rotate text, use a new method to crop text and rotate
-            self.draw_text_90_into(str(10*(sec[i+1]-sec[i])), image, (width+25, 100+int((sec[i]+sec[i+1])/2)))
+            self.draw_text_90_into(str(10*(sec[i+1]-sec[i])), image, (width+25, 700+int((sec[i]+sec[i+1])/2)))
 
     def draw_text_90_into (self, text: str, into, at):
         # Measure the text area
